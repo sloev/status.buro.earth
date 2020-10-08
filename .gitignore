@@ -1,0 +1,6 @@
+images/*.gif
+__pycache__/
+statusburo.db
+.env
+data/*.db
+.DS_Store

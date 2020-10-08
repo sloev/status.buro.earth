@@ -1,0 +1,15 @@
+version: "3.5"
+
+services:
+  api:
+    build:
+      context: .
+    env_file: ".env"
+    environment:
+      - LOG_LEVEL=10
+    ports:
+      - "9002:9002"
+    restart: always
+    volumes: 
+      - '/var/www/status.buro.earth/images:/images'
+      - './data:/data'

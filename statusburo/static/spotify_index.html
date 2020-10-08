@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="content">
+        <div class="signup-form" style="display:$showform;">
+    <form action="/spotify/signup" method="post" target="_self">
+        <label for="fusername">Username:</label><br><br>
+        <input 
+            type="text" id="fusername" name="username" maxlength="15" 
+            placeholder="optional" autocomplete="off">
+        <br><br>
+        <label for="fpublic">List on main page:</label><br><br>
+        <input type="checkbox" id="public" name="public" value="public">
+        <input type="submit" title="You can also press Enter" value="Sign in">
+    </form>
+</div>
+<div class="user-image" style="display:$showuserimage;">
+    <a href="$userimage">Your gif</a>
+    <span>Logout via your <a href="https://www.spotify.com/account/">spotify account</a></span> 
+</div>
+<div class="public-images">
+
+</div>
+    
+</body>
+</html>
+
