@@ -58,6 +58,17 @@ class SqlLite:
 
     async def teardown(self):
         await self.db.close()
+    
+    async def spotify_delete(self,user_id):
+        await self.db.execute(
+                """
+            delete from spotify_oauth
+            where user_id = ?
+            );
+            """,
+            [user_id]
+            )
+        await self.db.commit()
 
     async def spotify_get_latest_public(self, n=10):
         async with self.db.execute(
