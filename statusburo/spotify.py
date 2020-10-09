@@ -153,11 +153,11 @@ async def index(request):
 
 @blueprint.route("/spotify/signout", methods=["GET"])
 async def index(request):
-    user_id = response.cookies.get(settings.SPOTIFY_COOKIE_NAME)
-    del response.cookies[settings.SPOTIFY_COOKIE_NAME]
+    user_id = request.cookies.get(settings.SPOTIFY_COOKIE_NAME)
     await db.singleton.spotify_delete(user_id)
-    return response.redirect("https://www.spotify.com/us/account/apps/")
-
+    resp = response.redirect("https://www.spotify.com/us/account/apps/")
+    del resp.cookies[settings.SPOTIFY_COOKIE_NAME]
+    return resp
 
 @blueprint.route("/spotify/signup", methods=["POST"])
 async def index(request):
