@@ -63,8 +63,7 @@ class SqlLite:
         await self.db.execute(
                 """
             delete from spotify_oauth
-            where user_id = ?
-            );
+            where user_id = ?;
             """,
             [user_id]
             )
