@@ -225,7 +225,8 @@ async def index(request):
     for i in range(sleep_n):
         if os.path.exists("/images/{uuid}.gif"):
             break
-        asyncio.sleep(3/sleep_n)
+        asyncio.sleep(4/sleep_n)
+    asyncio.sleep(1)
     resp = response.redirect("/")
     resp.cookies[settings.SPOTIFY_COOKIE_NAME] = uuid
     return resp
