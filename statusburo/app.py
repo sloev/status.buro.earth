@@ -24,6 +24,9 @@ from sanic.exceptions import (
 
 app = Sanic("statusburo")
 
+if settings.TESTING:
+    app.static("/images", "./images")
+
 
 @app.listener("before_server_start")
 async def setup_db(app, loop):

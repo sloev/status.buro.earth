@@ -6,12 +6,21 @@ from typing import NamedTuple
 from sanic import Blueprint, response
 import logging
 import json
+import os
 
 SPOTIFY_INDEX_TEMPLATE = static.templates["spotify_index_html"]
 
 AUTH_URL = "https://accounts.spotify.com/authorize"
 TOKEN_URL = "https://accounts.spotify.com/api/token"
 API_URL = "https://api.spotify.com/v1"
+
+
+async def get_latest_gif_wall(n):
+    uuids = await db.singleton.spotify_get_latest_public(n)
+    html = ""
+    for uuid in uuids:
+        html += f'<img class="gif-wall-item" src="/images/{uuid}.gif"/>'
+    return html
 
 
 def get_spotify_auth_link(state):
@@ -112,19 +121,42 @@ def build_topic(topic, hits):
         "hits": hits,
     }
 
-    # print('auth', auth)
-    # async with request.app.http_session() as session:
-    #     auth, data = await spotify.get_latest_listens(session, auth)
-    #     return json(data)
 
-
-@blueprint.route("/spotify", methods=["GET"])
+@blueprint.route("/", methods=["GET"])
 async def index(request):
-    return response.html(
-        SPOTIFY_INDEX_TEMPLATE.substitute(
-            showform="block", showuserimage="none", userimage=""
+    uuid = request.cookies.get(settings.SPOTIFY_COOKIE_NAME)
+    if uuid:
+        return response.html(
+            SPOTIFY_INDEX_TEMPLATE.substitute(
+                statusburo_created_snippet=(
+                    '<a href="https://status.buro.earth/#spotify-form">\n'
+                    f'<img src="https://status.buro.earth/images/{uuid}.gif"/>\n'
+                    "</a>"
+                ),
+                showform="none",
+                showuserimage="block",
+                userimage=f"/images/{uuid}.gif",
+                gif_wall=await get_latest_gif_wall(30),
+            )
         )
-    )
+    else:
+        return response.html(
+            SPOTIFY_INDEX_TEMPLATE.substitute(
+                statusburo_created_snippet="",
+                showform="block",
+                showuserimage="none",
+                userimage="",
+                gif_wall=await get_latest_gif_wall(30),
+            )
+        )
+
+
+@blueprint.route("/spotify/signout", methods=["GET"])
+async def index(request):
+    user_id = response.cookies.get(settings.SPOTIFY_COOKIE_NAME)
+    del response.cookies[settings.SPOTIFY_COOKIE_NAME]
+    await db.singleton.spotify_delete(user_id)
+    return response.redirect("https://www.spotify.com/us/account/apps/")
 
 
 @blueprint.route("/spotify/signup", methods=["POST"])
@@ -132,7 +164,7 @@ async def index(request):
     uuid = utils.create_uuid()
     username = request.form.get("username")
     public = request.form.get("public") == "public"
-    print(uuid, username, public)
+
     return response.redirect(
         get_spotify_auth_link(
             json.dumps(
@@ -149,7 +181,6 @@ async def index(request):
     state = request.args.get("state")
     if not state:
         return response.html("400", 400)
-    print(state)
 
     state = json.loads(state)
 
@@ -176,7 +207,7 @@ async def index(request):
                 cause_description = response_data.get("error_description")
                 if cause_description.lower() == "authorization code expired":
                     raise utils.Redirect(
-                        "/spotify", f"cause:{cause}, description:{cause_description}"
+                        "/", f"cause:{cause}, description:{cause_description}"
                     )
                 else:
                     http_response.raise_for_status()
@@ -190,11 +221,14 @@ async def index(request):
     await db.singleton.spotify_create(
         user_name=user_name, public=public, **auth._asdict()
     )
-    return response.html(
-        SPOTIFY_INDEX_TEMPLATE.substitute(
-            showform="none", showuserimage="block", userimage=f"/images/{uuid}.gif"
-        )
-    )
+    sleep_n = 30
+    for i in range(sleep_n):
+        if os.path.exists("/images/{uuid}.gif"):
+            break
+        asyncio.sleep(3/sleep_n)
+    resp = response.redirect("/")
+    resp.cookies[settings.SPOTIFY_COOKIE_NAME] = uuid
+    return resp
 
 
 async def refresh_token(session, auth):

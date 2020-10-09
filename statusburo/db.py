@@ -59,6 +59,22 @@ class SqlLite:
     async def teardown(self):
         await self.db.close()
 
+    async def spotify_get_latest_public(self, n=10):
+        async with self.db.execute(
+            """
+            SELECT 
+                user_id
+            FROM spotify_oauth 
+            where public = 1
+            order by 
+                last_success_fetch desc
+            limit ?;
+        """,
+            [n],
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [r[0] for r in rows]
+
     async def spotify_get(self, n=10):
         utc_before = int(
             (
@@ -138,13 +154,7 @@ class SqlLite:
         token_expires_at,
         user_name=None,
     ):
-        utc_now = int(
-            (
-                datetime.utcnow()
-                - timedelta(hours=24)
-            ).timestamp()
-            * 1000.0
-        )
+        utc_now = int((datetime.utcnow() - timedelta(hours=24)).timestamp() * 1000.0)
         await self.db.execute(
             """
             insert into spotify_oauth(

@@ -7,6 +7,7 @@ services:
     env_file: ".env"
     environment:
       - LOG_LEVEL=10
+      - TESTING=1
     ports:
       - "9002:9002"
     restart: always

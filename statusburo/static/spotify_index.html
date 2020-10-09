@@ -2,31 +2,234 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StatusBuro</title>
+    <style>
+        body {
+            background-color:bisque;
+        }
+        h1 {
+            color:#ff70b8;
+            text-shadow: 2px 2px #a80093;
+        }
+        h2 {
+            color:#ff70b8;
+            text-shadow: 2px 2px #a80093;
+        }
+        h1 {
+            color:#ff70b8;
+            text-shadow: 2px 2px #a80093;
+        }
+        a, a:hover, a:visited {
+            color: #ff70b8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+       
+        .content {
+            background-color: #1f001b;
+            margin: 0 auto;
+            border-radius: 1em; 
+            padding: 1em;
+            max-width: 600px;
+            min-width: 320px;
+            margin-bottom: 50px;
+            line-height: 1em;
+            color: #94c98b;
+            font-family: "Comic Sans MS", cursive, sans-serif; 
+        }
+
+        .content div:not(:last-child) {
+            margin-bottom: 20px;
+        }
+        .support-button, .support-button:visited { 
+            display: inline-block; 
+            padding: 0.35em 1.2em; 
+            border: 0; 
+            margin: 0 0.3em 0.3em 0; 
+            border-radius: .5em; 
+            box-sizing: border-box; 
+            text-decoration: none; 
+            font-family: "Comic Sans MS", cursive, sans-serif; 
+            font-size: 14px;
+            font-weight: 300; color:#000000; 
+            text-align: center; 
+            transition: all 0.2s; 
+            background-color: #ffd000
+            } 
+            .support-button:hover { 
+                text-decoration: none;
+                color:#000000; 
+                background-color:#ff70b8; 
+                } 
+                @media all and (max-width:30em){ 
+                    .mybutton, input[type=submit]{ 
+                        margin:0.4em auto; 
+
+                        } 
+                        }
+
+        .mybutton, input[type=submit], .mybutton:visited { 
+            display: inline-block; 
+            padding: 0.35em 1.2em; 
+            border: 0.1em solid #FFFFFF; 
+            margin: 0 0.3em 0.3em 0; 
+            border-radius: 0.12em; 
+            box-sizing: border-box; 
+            text-decoration: none; 
+            font-family: "Comic Sans MS", cursive, sans-serif; 
+            font-size: 14px;
+            font-weight: 300; 
+            color:#FFFFFF; 
+            text-align: center; 
+            transition: all 0.2s; 
+            background-color: transparent
+            } 
+            .mybutton:hover, input[type=submit]:hover{ 
+                text-decoration: none;
+                color:#000000; 
+                background-color:#FFFFFF; 
+                } 
+                @media all and (max-width:30em){ 
+                    .mybutton, input[type=submit]{ 
+                        margin:0.4em auto; 
+
+                        } 
+                        }
+      
+        hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #a80093;
+            margin: 1em 0;
+            padding: 0;
+        }
+        .reveal-if-active {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: 0.5s;
+        }
+        input[type="checkbox"]:checked ~ .reveal-if-active {
+            opacity: 1;
+            max-height: 100px;
+            overflow: visible;
+            padding: 10px 20px;
+            transform: scale(1);
+        }
+
+        .created-form {
+            padding: 0 10px 0 10px;
+            background-color:beige;
+            color: #2b3b28;
+        }
+        .code {
+            white-space: pre-wrap;       /* Since CSS 2.1 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        }
+        #spotify-form:not(:target) {
+            display: none;
+        }
+        #spotify-form:target {
+            display: block;
+        }
+        .header {
+            width:100%;
+            position: relative;
+            z-index: 2;
+        }
+        .header-status-gif {
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            position: absolute;
+            width: 23%;
+            top: 40%;
+            z-index: 1;        
+        }
+        .gif-wall-item {
+            padding: 5px;
+        }
+        
+    </style>
+
 </head>
 <body>
     <div class="content">
-        <div class="signup-form" style="display:$showform;">
-    <form action="/spotify/signup" method="post" target="_self">
-        <label for="fusername">Username:</label><br><br>
-        <input 
-            type="text" id="fusername" name="username" maxlength="15" 
-            placeholder="optional" autocomplete="off">
-        <br><br>
-        <label for="fpublic">List on main page:</label><br><br>
-        <input type="checkbox" id="public" name="public" value="public">
-        <input type="submit" title="You can also press Enter" value="Sign in">
-    </form>
-</div>
-<div class="user-image" style="display:$showuserimage;">
-    <a href="$userimage">Your gif</a>
-    <span>Logout via your <a href="https://www.spotify.com/account/">spotify account</a></span> 
-</div>
-<div class="public-images">
+        <div class="header">
+            <img class="header-status-gif" src="/images/0BjEhZq2S5SD9qLY5blzYQ.gif" width="20%" alt="">
 
+            <img style="display:block" src="/images/ghettoblaster.png" width="100%" alt="">
+            <span><a href="/"><h1>Status Buro</h1></a></span>
+            <span><h3>Silly status gifs</h1></span>
+        </div>
+        <div class="navbar">
+            <a class="mybutton" href="#snippet-form">Create status gifs</a>
+            <a class="mybutton" href="#example">Gif wall</a>
+            <a class="support-button" href="https://www.buymeacoffee.com/sloev" target="_blank">☕ Support me</a>
+            <hr/>
+        </div>
+        <div id="intro">
+            <p>Welcome to Status Buro!</p>
+            <p>We hope you enjoy your stay and create some <b>AWESOME</b> gifs that you can show to the world.</p>
+            <p>Status Buro is under eternal construction and currently supports showing status from <a href="#spotify-form">Spotify</a> but <b>more will come!</b></p>
+            <p>
+                I wish you have a great time using Status Buro, everything is <a href="https://www.github.com/sloev/status.buro.earth" target="_blank">opensourced on github</a>. If you really like it a lot, <a href="https://www.buymeacoffee.com/sloev" target="_blank">consider donating</a>.
+            </p>
+            <p>
+                - <a href="https://www.github.com/sloev" target="_blank">sloev</a>
+            </p>
+        </div>
+        <hr/>
+        <div id="snippet-forms">
+            <span><h2>Create status gifs</h2></span>
+            <div class="navbar">
+                <a class="mybutton" href="#spotify-form">Spotify</a>        
+            </div>
+
+            <div id="spotify-form">
+                <div class="signup-form" style="display:$showform;">
+                    <span><h3>Create spotify gif</h3></span>
+                    <form action="/spotify/signup" method="post" target="_self">
+                        <label for="fusername">Username:</label><br><br>
+                        <input 
+                            type="text" id="fusername" name="username" maxlength="15" 
+                            placeholder="optional" autocomplete="off">
+                        <br><br>
+                        <label for="fpublic">List on main page:</label><br><br>
+                        <input type="checkbox" id="public" name="public" value="public">
+                        <input type="submit" title="You can also press Enter" value="Sign in">
+                    </form>
+                </div>
+                <div class="user-image" style="display:$showuserimage;">
+                    <span><h3>Your spotify gif</h3></span>
+                    <img src="$userimage"/>
+                    <div id="created-form" class="created-form">
+                        <xmp class="code">
+$statusburo_created_snippet
+                        </xmp>
+        
+                    </div>
+                    <span><a href="/spotify/signout">click to deauthorize spotify</a></span>
+   
+                </div>
+            
+            </div>
+        </div>
+
+    <br><br>
+        <div>
+            <span><h2 id="example">Public gifs:</h2></span>
+            $gif_wall
+        </div>
 </div>
-    
 </body>
 </html>
-
